@@ -54,8 +54,8 @@ class GeniusLED(Script):
 
     def execute(self, data):
         gcode_to_add = self.getSettingValueByKey("gcode_to_add") + "\n"
-        led_red = ";Genius LED\nM42 P4 S" + self.getSettingValueByKey("red") + "\n"
-        led_green = "M42 P5 S" + self.getSettingValueByKey("green") + "\n"
+        led_green = ";Genius LED\nM42 P4 S" + self.getSettingValueByKey(green") + "\n"
+        led_red = "M42 P5 S" + self.getSettingValueByKey("red") + "\n"
         led_blue = "M42 P6 S" + self.getSettingValueByKey("blue") + "\n"
 
         mygcode_to_add = gcode_to_add + led_red + led_green + led_blue
