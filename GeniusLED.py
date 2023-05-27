@@ -8,41 +8,48 @@ class GeniusLED(Script):
 
     def getSettingDataString(self):
         return """{
-            "name": "Genius LED at layer",
+            "name": "Genius LED at layer V3",
             "key": "GeniusLED",
             "metadata": {},
-            "version": 2,
+            "version": 3,
             "settings":
             {
+                "enable":
+                {
+                    "label": "Enable Genius LED",
+                    "description": "Enable or disable Genius LED code insertion.",
+                    "type": "bool",
+                    "default_value": true
+                },
                 "layer_at":
                 {
                     "label": "Insert at Layer",
-                    "description": "Artillery Genius LED settings at layer. ",
+                    "description": "Artillery Genius LED settings at layer.",
                     "type": "str",
                     "default_value": "0"
                 },
                 "gcode_to_add":
                 {
                     "label": "GCODE to insert:",
-                    "description": "GGCODE to insert at layer.",
+                    "description": "GCODE to insert at layer.",
                     "type": "str",
                     "default_value": ""
                 },
-                 "red":
+                "red":
                 {
                     "label": "Red:",
-                    "description": "Value for red  0 - 255",
+                    "description": "Value for red 0 - 255",
                     "type": "str",
                     "default_value": "0"
                 },
-                  "green":
+                "green":
                 {
                     "label": "Green:",
                     "description": "Value for green 0 - 255",
                     "type": "str",
                     "default_value": "0"
                 },
-                  "blue":
+                "blue":
                 {
                     "label": "Blue:",
                     "description": "Value for blue 0 - 255",
@@ -53,12 +60,15 @@ class GeniusLED(Script):
         }"""
 
     def execute(self, data):
-        gcode_to_add = self.getSettingValueByKey("gcode_to_add") + "\n"
-        led_green = ";Genius LED\nM42 P4 S" + self.getSettingValueByKey(green") + "\n"
-        led_red = "M42 P5 S" + self.getSettingValueByKey("red") + "\n"
-        led_blue = "M42 P6 S" + self.getSettingValueByKey("blue") + "\n"
+        enable = self.getSettingValueByKey("enable")
+        if not enable:
+            return data
 
-        mygcode_to_add = gcode_to_add + led_red + led_green + led_blue
+        gcode_to_add = self.getSettingValueByKey("gcode_to_add") + "\n"
+        led_rgb = ";Genius LED\nM150 U" + self.getSettingValueByKey("green") + " R" + self.getSettingValueByKey(
+            "red") + " B" + self.getSettingValueByKey("blue") + "\n"
+
+        mygcode_to_add = gcode_to_add + led_rgb
 
         my_layer = ";LAYER:" + self.getSettingValueByKey("layer_at")
         for layer in data:
@@ -67,9 +77,8 @@ class GeniusLED(Script):
             for line in lines:
                 if line == my_layer:
                     index = data.index(layer)
-                    layer = mygcode_to_add + layer 
-                   
+                    layer = mygcode_to_add + layer
+
                     data[index] = layer
                     break
         return data
-
