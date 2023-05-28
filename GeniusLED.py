@@ -11,7 +11,7 @@ class GeniusLED(Script):
             "name": "Genius LED at layer V3",
             "key": "GeniusLED",
             "metadata": {},
-            "version": 3,
+            "version": 2,
             "settings":
             {
                 "enable":
